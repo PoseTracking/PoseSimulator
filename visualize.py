@@ -3,7 +3,7 @@ import matplotlib.patches as patches
 import numpy as np
 
 def draw():
-	rect_file = np.loadtxt('/Users/mars/Desktop/PData/outputData.txt')
+	rect_file = np.loadtxt('/Users/mars/Desktop/10/TestInputData.txt')
 	shape = rect_file.shape
 
 	FRAME_LENGTH = 50
@@ -37,7 +37,7 @@ def draw():
 # this plot the first 50 frames(FRAME_LENGTH = 50) in the label2.txt, if you want to see other data, change PEOPLE_NUM
 	for frameIdx in range(START_FRAME, END_FRAME):
 		rect_data = rect_file[frameIdx, :].reshape(PEOPLE_NUM, 4)
-		for i in range(PEOPLE_NUM):
+		for i in range(0, PEOPLE_NUM, 2):
 			x = rect_data[i, 0]
 			y = rect_data[i, 1]
 			w = rect_data[i, 2] - x
@@ -49,3 +49,4 @@ def draw():
 			ax.add_patch(rect)
 
 	plt.show()
+draw()

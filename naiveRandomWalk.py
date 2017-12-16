@@ -125,80 +125,81 @@ def getRandomRange():
         y = z
     return x, y
 
-out2 = open(cwd + "/data/out2.txt", "w")
-out3 = open(cwd + "/data/out3.txt", "w")
-start_position = (0, 0)
-box_width_height = (10, 10)
-moving_speed = 10
-gap = 1
+def run():
+    out2 = open(cwd + "/data/out2.txt", "w")
+    out3 = open(cwd + "/data/out3.txt", "w")
+    start_position = (0, 0)
+    box_width_height = (10, 10)
+    moving_speed = 10
+    gap = 1
 
-randomX = 0
-randomY = 360
-
-
-# perform random walk
-for j in range(0, iterationTime):
-    personList = []
-    for k in range(0, personNum):
-        newPerson = loadPersonOne(cwd, viewWidth, viewHeight)
-        newPerson.startFromEdge()
-        personList.append(newPerson)
-        randomNoiseIndex = randint(10, 40)
-
-    for i in range(1, frameNum + int(frameNum/10) + 1):
-        currPoseList = []
-        # person 1
-        for person in personList:
-            speedOne = randint(minSpeed, maxSpeed)
-            direction = 0
-            if i % 20 == 0:
-                randX , randY = getRandomRange()
-                direction += randint(randX, randY)
-            person.walk(speedOne, direction)
-            currPose = person.getCurrentWalkingPose()
-            if i == randomNoiseIndex:
-                currPose = createRandomNoise(currPose)
-            currPoseList.append(currPose)
-
-            minX, minY, maxX, maxY = currPose.getBound()
-            if minX < 0 or minY < 0 or maxX >= 1980 or maxY >= 1080:
-                out3.write("-1 -1 -1 -1 ")
-                # for n in currPoseList[0].getPoseNodes():
-                #     n.invalid()
-            else:
-                out3.write(str(minX) + " " + str(minY) + " " + str(maxX) + " " + str(maxY) + " ")
-
-        # specify the output file order
-        inputDataWithRankingOrder(currPoseList)
-
-        out2.write("\n")
-        out3.write("\n")
+    randomX = 0
+    randomY = 360
 
 
-out2.close()
-out3.close()
+    # perform random walk
+    for j in range(0, iterationTime):
+        personList = []
+        for k in range(0, personNum):
+            newPerson = loadPersonOne(cwd, viewWidth, viewHeight)
+            newPerson.startFromEdge()
+            personList.append(newPerson)
+            randomNoiseIndex = randint(10, 40)
 
-#inputData = open(cwd + "/data/inputData.txt", 'w')
-#outputData = open(cwd + "/data/outputData.txt", 'w')
+        for i in range(1, frameNum + int(frameNum/10) + 1):
+            currPoseList = []
+            # person 1
+            for person in personList:
+                speedOne = randint(minSpeed, maxSpeed)
+                direction = 0
+                if i % 20 == 0:
+                    randX , randY = getRandomRange()
+                    direction += randint(randX, randY)
+                person.walk(speedOne, direction)
+                currPose = person.getCurrentWalkingPose()
+                if i == randomNoiseIndex:
+                    currPose = createRandomNoise(currPose)
+                currPoseList.append(currPose)
 
-inputData = open("/Users/mars/Desktop/PData/inputData.txt", 'w')
-outputData = open("/Users/mars/Desktop/PData/outputData.txt", 'w')
+                minX, minY, maxX, maxY = currPose.getBound()
+                if minX < 0 or minY < 0 or maxX >= 1980 or maxY >= 1080:
+                    out3.write("-1 -1 -1 -1 ")
+                    # for n in currPoseList[0].getPoseNodes():
+                    #     n.invalid()
+                else:
+                    out3.write(str(minX) + " " + str(minY) + " " + str(maxX) + " " + str(maxY) + " ")
 
-out2 = open(cwd + "/data/out2.txt", 'r')
-out3 = open(cwd + "/data/out3.txt", 'r')
+            # specify the output file order
+            inputDataWithRankingOrder(currPoseList)
 
-# this is for a bug in file operations, remove unrelated lines and spaces
-for line in out2:
-    if line != "\n":
-        inputData.write(line)
+            out2.write("\n")
+            out3.write("\n")
 
-for line in out3:
-    b = "100000 100000 -1 -1 " in line
-    if b == False:
-        outputData.write(line)
-# ***********************************************************************
 
-inputData.close()
-outputData.close()
+    out2.close()
+    out3.close()
 
-draw()
+    #inputData = open(cwd + "/data/inputData.txt", 'w')
+    #outputData = open(cwd + "/data/outputData.txt", 'w')
+
+    inputData = open("/Users/mars/Desktop/PData/inputData.txt", 'w')
+    outputData = open("/Users/mars/Desktop/PData/outputData.txt", 'w')
+
+    out2 = open(cwd + "/data/out2.txt", 'r')
+    out3 = open(cwd + "/data/out3.txt", 'r')
+
+    # this is for a bug in file operations, remove unrelated lines and spaces
+    for line in out2:
+        if line != "\n":
+            inputData.write(line)
+
+    for line in out3:
+        b = "100000 100000 -1 -1 " in line
+        if b == False:
+            outputData.write(line)
+    # ***********************************************************************
+
+    inputData.close()
+    outputData.close()
+
+    draw()

@@ -84,76 +84,88 @@ def getRandomRange():
         x = y
         y = z
     return x, y
+# frameNum = 50
+# iterationTime = 1
+# cameraHeight = 100
+# cameraDistance = 100
+# viewHeight = 1080
+# viewWidth = 1980
+# minSpeed = 10
+# maxSpeed = 20
+# walkingDirectionRange = [-90, 450]
+# personNum = 3
+def run(f, i, cH, cD, vH, vW, minS, maxS, dirMin, dirMax, pNum):
+    frameNum = int(f)
+    iterationTime = int(i)
+    cameraHeight = cH
+    cameraDistance = cD
+    viewHeight = vH
+    viewWidth = vW
+    minSpeed = minS
+    maxSpeed = maxS
+    walkingDirectionRange = [dirMin, dirMax]
+    personNum = int(pNum)
+    out2 = open(cwd + "/data/out2.txt", "w")
+    out3 = open(cwd + "/data/out3.txt", "w")
 
-out2 = open(cwd + "/data/out2.txt", "w")
-out3 = open(cwd + "/data/out3.txt", "w")
-start_position = (0, 0)
-box_width_height = (10, 10)
-moving_speed = 10
-gap = 1
+    # perform random walk
+    for j in range(0, iterationTime):
+        personList = []
+        for k in range(0, personNum):
+            newPerson = loadPersonOne(cwd, viewWidth, viewHeight)
+            personList.append(newPerson)
 
-randomX = 0
-randomY = 360
+        for i in range(1, frameNum + int(frameNum/10) + 1):
 
+            currPoseList = []
+            # person 1
+            for person in personList:
+                speedOne = randint(minSpeed, maxSpeed)
+                direction = randint(0, 360)
+                if i % 10 == 0:
+                    randX , randY = getRandomRange()
+                    direction += randint(randX, randY)
+                person.walk(speedOne, direction)
+                currPose = person.getCurrentWalkingPose()
+                currPoseList.append(currPose)
 
-# perform random walk
-for j in range(0, iterationTime):
-    personList = []
-    for k in range(0, personNum):
-        newPerson = loadPersonOne(cwd, viewWidth, viewHeight)
-        personList.append(newPerson)
+                minX, minY, maxX, maxY = currPose.getBound()
+                if minX < 0 or minY < 0 or maxX >= 1980 or maxY >= 1080:
+                    out3.write("-1 -1 -1 -1 ")
+                    for n in currPoseList[0].getPoseNodes():
+                        n.invalid()
+                else:
+                    out3.write(str(minX) + " " + str(minY) + " " + str(maxX) + " " + str(maxY) + " ")
 
-    for i in range(1, frameNum + int(frameNum/10) + 1):
+            for i in range(0, personNum):
+                index = randint(0, len(currPoseList)-1)
+                for node in currPoseList[index].getPoseNodes():
+                    out2.write(str(node.getX()) + " " + str(node.getY()) + " ")
+                currPoseList.remove(currPoseList[index])
 
-        currPoseList = []
-        # person 1
-        for person in personList:
-            speedOne = randint(minSpeed, maxSpeed)
-            direction = randint(0, 360)
-            if i % 10 == 0:
-                randX , randY = getRandomRange()
-                direction += randint(randX, randY)
-            person.walk(speedOne, direction)
-            currPose = person.getCurrentWalkingPose()
-            currPoseList.append(currPose)
-
-            minX, minY, maxX, maxY = currPose.getBound()
-            if minX < 0 or minY < 0 or maxX >= 1980 or maxY >= 1080:
-                out3.write("-1 -1 -1 -1 ")
-                for n in currPoseList[0].getPoseNodes():
-                    n.invalid()
-            else:
-                out3.write(str(minX) + " " + str(minY) + " " + str(maxX) + " " + str(maxY) + " ")
-
-        for i in range(0, personNum):
-            index = randint(0, len(currPoseList)-1)
-            for node in currPoseList[index].getPoseNodes():
-                out2.write(str(node.getX()) + " " + str(node.getY()) + " ")
-            currPoseList.remove(currPoseList[index])
-
-        out2.write("\n")
-        out3.write("\n")
+            out2.write("\n")
+            out3.write("\n")
 
 
-out2.close()
-out3.close()
+    out2.close()
+    out3.close()
 
-inputData = open(cwd + "/data/inputData.txt", 'w')
-outputData = open(cwd + "/data/outputData.txt", 'w')
+    inputData = open(cwd + "/data/inputData.txt", 'w')
+    outputData = open(cwd + "/data/outputData.txt", 'w')
 
-out2 = open(cwd + "/data/out2.txt", 'r')
-out3 = open(cwd + "/data/out3.txt", 'r')
+    out2 = open(cwd + "/data/out2.txt", 'r')
+    out3 = open(cwd + "/data/out3.txt", 'r')
 
-# this is for a bug in file operations, remove unrelated lines and spaces
-for line in out2:
-    if line != "\n":
-        inputData.write(line)
+    # this is for a bug in file operations, remove unrelated lines and spaces
+    for line in out2:
+        if line != "\n":
+            inputData.write(line)
 
-for line in out3:
-    b = "100000 100000 -1 -1 " in line
-    if b == False:
-        outputData.write(line)
-# ***********************************************************************
+    for line in out3:
+        b = "100000 100000 -1 -1 " in line
+        if b == False:
+            outputData.write(line)
+    # ***********************************************************************
 
-inputData.close()
-outputData.close()
+    inputData.close()
+    outputData.close()
