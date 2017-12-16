@@ -24,6 +24,8 @@ personNum = 1
 
 comparator = Comparator()
 cwd = os.getcwd()
+out2 = open(cwd + "/data/out2.txt", "w")
+out3 = open(cwd + "/data/out3.txt", "w")
 
 def createRandomNoise(currPose):
     newPose = Pose()
@@ -141,9 +143,18 @@ def getRandomRange():
     return x, y
 
 
-def run():
-    out2 = open(cwd + "/data/out2.txt", "w")
-    out3 = open(cwd + "/data/out3.txt", "w")
+def run(f, i, cH, cD, vH, vW, minS, maxS, dirMin, dirMax, pNum):
+    global out2, out3
+    frameNum = int(f)
+    iterationTime = int(i)
+    cameraHeight = cH
+    cameraDistance = cD
+    viewHeight = vH
+    viewWidth = vW
+    minSpeed = minS
+    maxSpeed = maxS
+    walkingDirectionRange = [dirMin, dirMax]
+    personNum = int(pNum)
     start_position = (0, 0)
     box_width_height = (10, 10)
     moving_speed = 10

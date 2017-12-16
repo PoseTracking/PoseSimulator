@@ -89,19 +89,22 @@ class MyFirstGUI:
         self.cameraHeightEntry.insert(0, "100")
         self.cameraHeightEntry.place(x=420, y=130)
 
-        self.greet_button = Button(master, text="Greet", command=self.greet)
+        self.greet_button = Button(master, text="Random Walk", command=self.generateRandomPose)
         self.greet_button.place(x=50, y=300)
 
-        self.generate_button = Button(master, text="Generate", command=self.generate_pose)
+        self.generate_button = Button(master, text="Naive Random Walk", command=self.generateNaiveRandomPose)
         self.generate_button.place(x=50, y=330)
 
+        self.generate_button = Button(master, text="Noise Random Walk", command=self.generateNoiseRandomPose)
+        self.generate_button.place(x=50, y=360)
+
         self.close_button = Button(master, text="Close", command=master.quit)
-        self.close_button.place(x=50, y=360)
+        self.close_button.place(x=50, y=390)
 
     def greet(self):
         print("Greetings!")
 
-    def generate_pose(self):
+    def generateRandomPose(self):
         personNum = int(self.personNumEntry.get())
         frameNum = int(self.frameNumEntry.get())
         iterationTime = int(self.iterationEntry.get())
@@ -116,6 +119,35 @@ class MyFirstGUI:
         randomWalk.run(frameNum, iterationTime, cameraHeight, cameraDistance, viewHeight, viewWidth, minSpeed, maxSpeed,
                        walkingDirectionRangeMin, walkingDirectionRangeMax, personNum)
 
+    def generateNaiveRandomPose(self):
+        personNum = int(self.personNumEntry.get())
+        frameNum = int(self.frameNumEntry.get())
+        iterationTime = int(self.iterationEntry.get())
+        viewHeight = float(self.viewHeightEntry.get())
+        viewWidth = float(self.viewHeightEntry.get())
+        minSpeed = float(self.minSpeed.get())
+        maxSpeed = float(self.maxSpeed.get())
+        walkingDirectionRangeMin = float(self.minAngle.get())
+        walkingDirectionRangeMax = float(self.maxAngle.get())
+        cameraHeight = float(self.cameraHeightEntry.get())
+        cameraDistance = float(self.cameraWidthEntry.get())
+        randomWalk.run(frameNum, iterationTime, cameraHeight, cameraDistance, viewHeight, viewWidth, minSpeed, maxSpeed,
+                       walkingDirectionRangeMin, walkingDirectionRangeMax, personNum)
+
+    def generateNoiseRandomPose(self):
+        personNum = int(self.personNumEntry.get())
+        frameNum = int(self.frameNumEntry.get())
+        iterationTime = int(self.iterationEntry.get())
+        viewHeight = float(self.viewHeightEntry.get())
+        viewWidth = float(self.viewHeightEntry.get())
+        minSpeed = float(self.minSpeed.get())
+        maxSpeed = float(self.maxSpeed.get())
+        walkingDirectionRangeMin = float(self.minAngle.get())
+        walkingDirectionRangeMax = float(self.maxAngle.get())
+        cameraHeight = float(self.cameraHeightEntry.get())
+        cameraDistance = float(self.cameraWidthEntry.get())
+        randomWalk.run(frameNum, iterationTime, cameraHeight, cameraDistance, viewHeight, viewWidth, minSpeed, maxSpeed,
+                       walkingDirectionRangeMin, walkingDirectionRangeMax, personNum)
 
 root = Tk()
 my_gui = MyFirstGUI(root)
