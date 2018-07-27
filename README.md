@@ -7,5 +7,4 @@ Deep learning has been largely used in human tracking problem. Traditionally, we
 
 ## Usage
 We implemented a graphical user interface which can generate data and revise parameters easily. 
-<img src="https://github.com/PoseTracking/PoseSimulator/blob/master/SimulatorGUI.png" width="480">
-!()
+![](SimulatorGUI.png)
